@@ -1,0 +1,128 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    {
+      "webid": "https://iri.suomi.fi/model/webid/",
+      "skos": "http://www.w3.org/2004/02/skos/core#",
+      "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+      "Identifier": "webid:Identifier",
+      "PeriodOfTime": "webid:PeriodOfTime",
+      "Agent": "webid:Agent",
+
+      "notation": { "@id": "webid:notation", "@type": "xsd:string" },
+      "scheme":   { "@id": "webid:scheme",   "@type": "@id" },
+      "uri":      { "@id": "webid:uri",      "@type": "@id" },
+      "method":   { "@id": "webid:method",   "@type": "xsd:string" },
+      "dereferencingParameter": { "@id": "webid:dereferencingParameter", "@type": "xsd:string" },
+      "issuer":   { "@id": "webid:issuer",   "@type": "@id" },
+      "owner":    { "@id": "webid:owner",    "@type": "@id" },
+      "resolver": { "@id": "webid:resolver", "@type": "@id" },
+      "status":   { "@id": "webid:status",   "@type": "@id" },
+      "privacyPosture": { "@id": "webid:privacyPosture", "@type": "@id" },
+      "assignmentDate": { "@id": "webid:assignmentDate", "@type": "xsd:dateTime" },
+      "validityPeriod": { "@id": "webid:validityPeriod", "@type": "@id" },
+      "startDate": { "@id": "webid:startDate", "@type": "xsd:dateTime" },
+      "endDate":   { "@id": "webid:endDate",   "@type": "xsd:dateTime" }
+    }
+  ],
+  "id": "urn:uuid:3c0c33c2-2f2e-4716-9a8e-7a2a2a09b1f1",
+  "type": ["VerifiableCredential", "OrganizationIdentifiersCredential"],
+  "issuer": "did:example:issuer:eubw-01",
+  "validFrom": "2025-10-13T11:30:00Z",
+  "name": "Organization Identifiers (EUID, EORI, VAT, Y-tunnus)",
+  "description": "Illustrative examples of multiple identifier schemes for a Finnish organization.",
+  "credentialSubject": [
+    {
+      "id": "urn:uuid:org-ACMECORP-FI",
+      "type": "Identifier",
+      "notation": "FI-PRH.1000000-4",
+      "scheme": "https://example.org/scheme/euid",
+      "uri": "https://example.org/resolve/euid/FI-PRH.1000000-4",
+      "issuer": "did:example:authority:BRIS",
+      "owner": "did:example:org:ACMECORP-FI",
+      "status": "https://example.org/concept/status/active",
+      "privacyPosture": "https://example.org/concept/privacy/public",
+      "assignmentDate": "2020-05-12T00:00:00Z",
+      "validityPeriod": {
+        "id": "urn:uuid:euid-period-1",
+        "type": "PeriodOfTime",
+        "startDate": "2020-05-12T00:00:00Z",
+        "endDate": "2030-05-11T23:59:59Z"
+      },
+      "resolver": "https://example.org/resolver/bris",
+      "method": "euid"
+    },
+    {
+      "id": "urn:uuid:org-ACMECORP-FI",
+      "type": "Identifier",
+      "notation": "FI10000004",
+      "scheme": "https://example.org/scheme/eori",
+      "uri": "https://example.org/resolve/eori/FI10000004",
+      "issuer": "did:example:authority:EU-CUSTOMS",
+      "owner": "did:example:org:ACMECORP-FI",
+      "status": "https://example.org/concept/status/active",
+      "privacyPosture": "https://example.org/concept/privacy/public",
+      "assignmentDate": "2021-03-01T00:00:00Z",
+      "validityPeriod": {
+        "id": "urn:uuid:eori-period-1",
+        "type": "PeriodOfTime",
+        "startDate": "2021-03-01T00:00:00Z",
+        "endDate": "2031-02-28T23:59:59Z"
+      },
+      "resolver": "https://example.org/resolver/eori",
+      "method": "eori"
+    },
+    {
+      "id": "urn:uuid:org-ACMECORP-FI",
+      "type": "Identifier",
+      "notation": "FI10000004",
+      "scheme": "https://example.org/scheme/vat",
+      "uri": "https://example.org/resolve/vat/FI10000004",
+      "issuer": "did:example:authority:Vero",
+      "owner": "did:example:org:ACMECORP-FI",
+      "status": "https://example.org/concept/status/active",
+      "privacyPosture": "https://example.org/concept/privacy/public",
+      "assignmentDate": "2019-09-15T00:00:00Z",
+      "validityPeriod": {
+        "id": "urn:uuid:vat-period-1",
+        "type": "PeriodOfTime",
+        "startDate": "2019-09-15T00:00:00Z",
+        "endDate": "2029-09-14T23:59:59Z"
+      },
+      "resolver": "https://example.org/resolver/vat",
+      "method": "vat"
+    },
+    {
+      "id": "urn:uuid:org-ACMECORP-FI",
+      "type": "Identifier",
+      "notation": "1000000-4",
+      "scheme": "https://example.org/scheme/ytj",
+      "uri": "https://example.org/resolve/ytj/1000000-4",
+      "issuer": "did:example:authority:PRH-YTJ",
+      "owner": "did:example:org:ACMECORP-FI",
+      "status": "https://example.org/concept/status/active",
+      "privacyPosture": "https://example.org/concept/privacy/public",
+      "assignmentDate": "2018-01-02T00:00:00Z",
+      "validityPeriod": {
+        "id": "urn:uuid:ytj-period-1",
+        "type": "PeriodOfTime",
+        "startDate": "2018-01-02T00:00:00Z",
+        "endDate": "2028-01-01T23:59:59Z"
+      },
+      "resolver": "https://example.org/resolver/ytj",
+      "method": "ytunnus"
+    }
+  ],
+  "credentialStatus": {
+    "id": "https://example.org/status/org-identifiers#list",
+    "type": "StatusList2021Entry",
+    "statusListIndex": "42",
+    "statusListCredential": "https://example.org/status/org-identifiers/statuslist.json"
+  },
+  "credentialSchema": {
+    "id": "https://example.org/schemas/OrganizationIdentifiersCredential-1.0.json",
+    "type": "JsonSchema"
+  }
+  /* proof omitted for brevity */
+}
