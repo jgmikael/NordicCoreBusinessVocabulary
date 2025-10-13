@@ -1,0 +1,68 @@
+{
+  "@context": {
+    "webid": "https://iri.suomi.fi/model/webid/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Identifier": "webid:Identifier",
+    "PeriodOfTime": "webid:PeriodOfTime",
+    "Agent": "webid:Agent",
+
+    "notation": {
+      "@id": "webid:notation",
+      "@type": "xsd:string"
+    },
+    "scheme": {
+      "@id": "webid:scheme",
+      "@type": "@id"
+    },
+    "uri": {
+      "@id": "webid:uri",
+      "@type": "@id"
+    },
+    "method": {
+      "@id": "webid:method",
+      "@type": "xsd:string"
+    },
+    "dereferencingParameter": {
+      "@id": "webid:dereferencingParameter",
+      "@type": "xsd:string"
+    },
+    "issuer": {
+      "@id": "webid:issuer",
+      "@type": "@id"
+    },
+    "owner": {
+      "@id": "webid:owner",
+      "@type": "@id"
+    },
+    "resolver": {
+      "@id": "webid:resolver",
+      "@type": "@id"
+    },
+    "status": {
+      "@id": "webid:status",
+      "@type": "@id"
+    },
+    "privacyPosture": {
+      "@id": "webid:privacyPosture",
+      "@type": "@id"
+    },
+    "assignmentDate": {
+      "@id": "webid:assignmentDate",
+      "@type": "xsd:dateTime"
+    },
+    "validityPeriod": {
+      "@id": "webid:validityPeriod",
+      "@type": "@id"
+    },
+    "startDate": {
+      "@id": "webid:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "endDate": {
+      "@id": "webid:endDate",
+      "@type": "xsd:dateTime"
+    }
+  }
+}
