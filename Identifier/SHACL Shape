@@ -1,0 +1,180 @@
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix webid: <https://iri.suomi.fi/model/webid/> .
+
+#################################################################
+# Core identifier node
+#################################################################
+
+webid:IdentifierShape
+  a sh:NodeShape ;
+  sh:targetClass webid:Identifier ;
+  sh:closed false ;
+
+  # --- Recommended core (warning if missing) ---
+  sh:property [
+    sh:path webid:notation ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:message "Identifier MUST have a single textual notation (value)." ;
+    sh:severity sh:Violation
+  ] ;
+
+  sh:property [
+    sh:path webid:scheme ;
+    # Scheme can be an IRI literal or a node; here we accept IRI-typed literal
+    sh:datatype xsd:anyURI ;
+    sh:maxCount 1 ;
+    sh:message "Identifier scheme (namespace/authority URI). Recommended (0..1)." ;
+    sh:severity sh:Warning
+  ] ;
+
+  # --- Optional but typed and constrained ---
+
+  sh:property [
+    sh:path webid:uri ;
+    sh:datatype xsd:anyURI ;
+    sh:maxCount 1 ;
+    sh:message "Concrete resolvable URI for this identifier (if available)." ;
+    sh:severity sh:Info
+  ] ;
+
+  sh:property [
+    sh:path webid:method ;
+    sh:datatype xsd:string ;
+    sh:maxCount 1 ;
+    sh:message "Resolution/derivation method (e.g., DID method)." ;
+    sh:severity sh:Info
+  ] ;
+
+  sh:property [
+    sh:path webid:dereferencingParameter ;
+    sh:datatype xsd:string ;
+    sh:message "Optional dereferencing parameter (e.g., fragment, query component)." ;
+    sh:severity sh:Info
+  ] ;
+
+  sh:property [
+    sh:path webid:issuer ;
+    sh:class webid:Agent ;
+    sh:maxCount 1 ;
+    sh:message "Agent that issued/assigned the identifier." ;
+    sh:severity sh:Info
+  ] ;
+
+  sh:property [
+    sh:path webid:owner ;
+    sh:class webid:Agent ;
+    sh:maxCount 1 ;
+    sh:message "Current owner/holder of the identifier (may differ from issuer)." ;
+    sh:severity sh:Info
+  ] ;
+
+  sh:property [
+    sh:path webid:resolver ;
+    sh:nodeKind sh:IRI ;
+    sh:maxCount 1 ;
+    sh:message "IRI of a resolver service (if modeled as a resource/endpoint)." ;
+    sh:severity sh:Info
+  ] ;
+
+  sh:property [
+    sh:path webid:status ;
+    sh:class skos:Concept ;
+    sh:maxCount 1 ;
+    sh:message "Lifecycle status concept (e.g., active / retired / superseded)." ;
+    sh:severity sh:Info
+  ] ;
+
+  sh:property [
+    sh:path webid:privacyPosture ;
+    sh:class skos:Concept ;
+    sh:maxCount 1 ;
+    sh:message "Privacy posture concept (e.g., public / restricted / confidential)." ;
+    sh:severity sh:Info
+  ] ;
+
+  sh:property [
+    sh:path webid:assignmentDate ;
+    sh:datatype xsd:dateTime ;
+    sh:maxCount 1 ;
+    sh:message "Date/time when the identifier was assigned (subproperty of dct:issued semantically)." ;
+    sh:severity sh:Info
+  ] ;
+
+  sh:property [
+    sh:path webid:validityPeriod ;
+    sh:class webid:PeriodOfTime ;
+    sh:maxCount 1 ;
+    sh:node webid:PeriodOfTimeShape ;
+    sh:message "Validity interval for the identifier (if applicable)." ;
+    sh:severity sh:Info
+  ] ;
+
+  # --- Conditional logic (examples) ---
+
+  # If scheme looks like a DID namespace, require a method
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "When scheme looks like a DID method (starts with 'did:'), 'webid:method' must be present." ;
+    sh:severity sh:Warning ;
+    sh:select """
+      PREFIX webid: <https://iri.suomi.fi/model/webid/>
+      PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#>
+      SELECT $this WHERE {
+        OPTIONAL { $this webid:scheme ?sch . }
+        FILTER(BOUND(?sch) && STRSTARTS(STR(?sch), "did:"))
+        FILTER NOT EXISTS { $this webid:method ?m . }
+      }
+    """
+  ] .
+
+#################################################################
+# Period of Time (used by validityPeriod)
+#################################################################
+
+webid:PeriodOfTimeShape
+  a sh:NodeShape ;
+  sh:targetClass webid:PeriodOfTime ;
+  sh:closed false ;
+  sh:property [
+    sh:path webid:startDate ;
+    sh:datatype xsd:dateTime ;
+    sh:maxCount 1 ;
+    sh:message "Start of the validity period." ;
+    sh:severity sh:Info
+  ] ;
+  sh:property [
+    sh:path webid:endDate ;
+    sh:datatype xsd:dateTime ;
+    sh:maxCount 1 ;
+    sh:message "End of the validity period." ;
+    sh:severity sh:Info
+  ] ;
+  # startDate <= endDate (when both provided)
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "If both startDate and endDate are present, startDate must be <= endDate." ;
+    sh:severity sh:Violation ;
+    sh:select """
+      PREFIX webid: <https://iri.suomi.fi/model/webid/>
+      SELECT $this WHERE {
+        $this webid:startDate ?s ; webid:endDate ?e .
+        FILTER ( ?s > ?e )
+      }
+    """
+  ] .
+
+#################################################################
+# Minimal Agent shape (optional helper, if you want to validate IRIs)
+#################################################################
+
+webid:AgentShape
+  a sh:NodeShape ;
+  sh:targetClass webid:Agent ;
+  sh:closed false .
